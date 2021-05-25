@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
+  
+
+<div class = "row">  
+    <div class = "col-md-10 offset-md-3">
+        <div class="col-lg-8">
+            <h3>Makaleler</h3>
+            <hr>
+            </div>
+    </div>
+</div>
+
+<div class = "row">
+    <div class = "col-md-10 offset-md-3">
+        <div class="col-lg-8">
+            <form>
+                {% csrf_token %}
+            <input type ="text" name ="keyword" class="input-sm" maxlength="64" placeholder="Ara...">
+            <button type = "submit" type="button" class="btn btn-primary ripple-surface"> Ara
+                <i class="fas fa-search"></i>
+              </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if articles %}
+{% for article  in articles %}
+  
+<div class="row">
+    <div class="col-md-10 offset-md-3">
+        <!-- Post content-->
+        <div class="col-lg-8">
+            <!-- Title-->
+            <a href="{% url 'article:detail' article.id %}"><h2 class="mt-4">{{article.title}}</h2></a>
+            <!-- Author-->
+            <p class="lead">
+                
+                {{article.author.username}} tarafından yayınlandı.
+            </p>
+            <hr />
+            <!-- Date and time-->
+            <p>{{article.created_date}}</p>
+            <hr />
+            <!-- Preview image-->
+            {% if article.article_image %}
+            <a href="{% url 'article:detail' article.id %}"><img class="img-fluid rounded" src="{{article.article_image.url}}" alt="..." /></a>
+            {% else %}
+            {% endif %}
+            <hr />
+            <!-- Post content-->
+            <p class="lead">
+                {{article.content|safe|truncatewords:20}}
+                <a href="{% url 'article:detail' article.id %}">Devamını oku</a>
+            </p>
+            <hr/>
+
+
+        </div>
+    </div>  
+</div>
+  
+{% endfor %}
+
+{% else %}
+<div class = "row"></div>
+<div class = "col-md-10 offset-md-3">
+    <div class="col-lg-8">
+    <div class = "alert alert-danger">
+    Makale bulunamadı
+    </div>
+</div>
+</div>
+{% endif %}
+{% endblock body %}

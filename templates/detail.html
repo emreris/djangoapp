@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="row">
+    <!-- Post content-->
+    <div class="col-lg-8">
+        <!-- Title-->
+        <h2 class="mt-4">{{article.title}}</h2>
+        <!-- Author-->
+        <p class="lead">
+            by
+            {{article.author}}
+        </p>
+        <hr />
+        <!-- Date and time-->
+        <p>{{article.created_date}}</p>
+        <hr />
+        <!-- Preview image-->
+        {% if article.article_image %}
+        <img class="img-fluid rounded" src="{{article.article_image.url}}" alt="..." />
+        {% else %}
+        {% endif %}
+        <hr />
+        <!-- Post content-->
+        <p class="lead">
+            {{article.content|safe}}
+        </p>
+        <hr />
+ <h4>Yorumlar:</h4>
+ <hr>
+{% if comments %}
+{% for comment in comments %}
+    <div class="media mb-4">
+        <img class="d-flex mr-3 rounded-circle" src="https://icons.iconarchive.com/icons/hopstarter/soft-scraps/48/User-Chat-icon.png" alt="..." />
+        <div class="media-body">
+            <h5 class="mt-0">{{comment.comment_author}}</h5>
+            {{comment.comment_date}} <br><hr>
+            {{comment.comment_content}}
+
+        </div>
+    </div>
+{% endfor %}
+{% else %}
+<div class = "alert alert-danger">Bu makaleye herhangi bir yorum yazılmamış. İlk yorum yapan siz olun.</div>
+{% endif %}
+
+<div class="card my-4">
+    <h5 class="card-header">Yorum Ekle:</h5>
+    <div class="card-body">
+        <form method = "post"  action ="{% url 'article:comment' article.id %}">
+            {% csrf_token %}
+            <form>
+                <div class="form-group">
+                  <label for="formGroupExampleInput">İsim:</label>
+                  <input name = "comment_author" type="text" class="form-control" id="formGroupExampleInput" placeholder="İsminizi giriniz.">
+                </div>
+              <div class="form-group">
+            <label for="formGroupExampleInput">Yorum:</label>
+           <textarea name = "comment_content" class="form-control" rows="3"></textarea>
+            </div>
+                <button type = "submit" class = "btn btn-primary">Ekle</button>
+            </form>
+        </form>
+    </div>
+</div>
+</div>
+</div>  
+{% endblock body %}
+
